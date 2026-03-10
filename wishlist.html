@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samsung Wishlist · responsive</title>
+
+  <!-- Bootstrap 5 + icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* glass navbar */
+    .navbar-glass {
+      background: rgba(0, 0, 0, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .navbar-brand {
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, #ccccff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-link { color: #eee !important; font-weight: 500; }
+    .nav-link.active { color: #ffd966 !important; }
+
+    /* wishlist card — fully responsive */
+    .wishlist-card {
+      background: #1c1c1c;
+      border-radius: 18px;
+      padding: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      transition: 0.2s;
+    }
+    .wishlist-card:hover {
+      background: #242424;
+    }
+    .wishlist-card img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 14px;
+      background: #2b2b2b;
+    }
+    .wishlist-info {
+      flex: 1;
+      min-width: 160px;
+    }
+    .wishlist-info h6 {
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+    .wishlist-info p {
+      color: #ffbc6c;
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+
+    .btn-soft-success {
+      background: #1f5e3f;
+      border: none;
+      color: white;
+      border-radius: 40px;
+      padding: 0.45rem 1.2rem;
+      font-weight: 500;
+    }
+    .btn-soft-success:hover {
+      background: #2b8a53;
+    }
+    .btn-soft-danger {
+      background: #8b2b2b;
+      border: none;
+      color: white;
+      border-radius: 40px;
+      padding: 0.45rem 1.2rem;
+    }
+    .btn-soft-danger:hover {
+      background: #b13e3e;
+    }
+
+    /* footer (identical style, but made compact for mobile) */
+    .big-footer {
+      background: #0c0b12;
+      color: #e0ddee;
+      padding: 60px 0 25px;
+      border-top: 2px solid #2b2635;
+      margin-top: auto;
+    }
+    .footer-title {
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: 1.8rem;
+      background: linear-gradient(135deg, #ffddaa, #c0b7d6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .footer-link {
+      color: #aaa5c0;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .footer-link:hover {
+      color: #ffbc6c;
+      transform: translateX(6px);
+    }
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: #1f1b2a;
+      border-radius: 60px;
+      color: white;
+      font-size: 1.5rem;
+      margin-right: 12px;
+      border: 1px solid #3a3347;
+      transition: 0.2s;
+      text-decoration: none;
+    }
+    .social-icon:hover {
+      background: #3b3150;
+      color: #ffbc6c;
+      transform: scale(1.05);
+    }
+
+    .newsletter-input {
+      background: #201d2b;
+      border: 1px solid #413a52;
+      border-radius: 50px;
+      padding: 12px 18px;
+      color: white;
+      width: 100%;
+    }
+    .newsletter-input:focus {
+      outline: 2px solid #aa9ed2;
+    }
+    .btn-subscribe {
+      background: #ffbc6c;
+      border: none;
+      color: #1a1625;
+      font-weight: 600;
+      border-radius: 50px;
+      padding: 12px 24px;
+      white-space: nowrap;
+    }
+    .btn-subscribe:hover {
+      background: #ffa947;
+    }
+
+    .app-badge {
+      display: inline-block;
+      background: #1e1b29;
+      color: #ddd;
+      padding: 10px 22px;
+      border-radius: 50px;
+      text-decoration: none;
+      margin-right: 10px;
+      margin-top: 10px;
+      border: 1px solid #3d354b;
+    }
+    .app-badge i { margin-right: 6px; }
+
+    .footer-bottom {
+      border-top: 1px solid #2b2635;
+      margin-top: 40px;
+      padding-top: 25px;
+      color: #8d86a5;
+    }
+
+    /* empty wishlist style */
+    .empty-state {
+      background: #1c1c1c;
+      border-radius: 30px;
+      padding: 4rem 2rem;
+      text-align: center;
+      color: #aaaaaa;
+      border: 2px dashed #333;
+    }
+    .empty-state i {
+      font-size: 4rem;
+      color: #4a4a4a;
+    }
+
+    /* badge adjustments on small */
+    @media (max-width: 576px) {
+      .wishlist-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .wishlist-card img {
+        width: 100%;
+        max-width: 130px;
+        height: auto;
+        aspect-ratio: 1/1;
+      }
+      .wishlist-info {
+        width: 100%;
+      }
+      .btn-soft-success, .btn-soft-danger {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      .d-flex.gap-2 {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== GLASS NAVBAR (identical, fully responsive) ========== -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top navbar-glass">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-3" href="index.html">
+      <span style="color: deepskyblue;">PULSE TECH</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#shop">Shop</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Categories</a>
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="index.html#phone-cases">Phone Cases</a></li>
+            <li><a class="dropdown-item" href="index.html#screen-protectors">Screen protectors</a></li>
+            <li><a class="dropdown-item" href="index.html#chargers">Chargers</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link text-warning fw-semibold" href="index.html#Deals">Deals</a></li>
+        <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+      </ul>
+      
+      <ul class="navbar-nav">
+        <!-- Wishlist (active for this page) -->
+        <li class="nav-item me-2">
+          <a class="nav-link active position-relative" href="wishlist.html">
+            <i class="bi bi-heart fs-5 text-danger"></i>
+            <span id="wishlist-count" class="badge bg-danger position-absolute top-0 start-100 translate-middle">0</span>
+          </a>
+        </li>
+        <!-- Cart -->
+        <li class="nav-item me-2">
+          <a class="nav-link position-relative" href="cart.html">
+            <i class="bi bi-cart3 fs-5"></i>
+            <span id="cart-count" class="badge bg-warning text-dark position-absolute top-0 start-100 translate-middle">0</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <i class="bi bi-person-circle me-1"></i> Login
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== MAIN WISHLIST SECTION (fully responsive) ========== -->
+<div class="container py-4 py-md-5">
+  <div class="d-flex align-items-center gap-3 mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-heart-fill text-danger me-2"></i> My wishlist</h2>
+    <span class="badge bg-secondary rounded-pill px-3 py-2" id="wishlist-counter">0 items</span>
+  </div>
+
+  <!-- wishlist items injected -->
+  <div id="wishlist-items"></div>
+
+  <!-- subtle back to shop link -->
+  <div class="mt-5 text-center">
+    <a href="index.html#shop" class="text-decoration-none" style="color: #ffbc6c;">
+      <i class="bi bi-arrow-left me-1"></i> continue shopping
+    </a>
+  </div>
+</div>
+
+<!-- ========== FOOTER (identical, stacked nicely on mobile) ========== -->
+<footer class="big-footer">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-4">
+        <h3 class="footer-title"><i class="bi bi-phone me-2" style="color:#ffbc6c;"></i> SAMSUNG accessories</h3>
+        <p class="mb-4" style="color:#9b94b0; line-height:1.7">We design minimal, durable and elegant accessories for your Galaxy devices.</p>
+        <div class="d-flex flex-wrap">
+          <a href="#" class="social-icon"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-youtube"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="social-icon"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-4">
+        <h5 class="footer-title">Explore</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="footer-link">New arrivals</a></li>
+          <li><a href="#" class="footer-link">Best sellers</a></li>
+          <li><a href="#" class="footer-link">Limited edition</a></li>
+          <li><a href="#" class="footer-link">Gift cards</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-4">
+        <h5 class="footer-title">Support</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" class="footer-link">Contact us</a></li>
+          <li><a href="#" class="footer-link">Track order</a></li>
+          <li><a href="#" class="footer-link">Returns & warranty</a></li>
+          <li><a href="#" class="footer-link">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4">
+        <h5 class="footer-title">Stay updated</h5>
+        <p style="color:#9b94b0;">Get early access to drops and exclusive offers.</p>
+        <div class="d-flex flex-column flex-sm-row gap-2 mb-4">
+          <input type="email" placeholder="Your email" class="newsletter-input">
+          <button class="btn-subscribe">Subscribe</button>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          <a href="#" class="app-badge"><i class="bi bi-google-play"></i> Google Play</a>
+          <a href="#" class="app-badge"><i class="bi bi-apple"></i> App Store</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <span>© 2025 Samsung Accessories — all rights reserved</span>
+      <span class="mt-3 mt-md-0"><i class="bi bi-currency-rupee"></i> Prices incl. GST | <i class="bi bi-shield-check"></i> secure checkout</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== JAVASCRIPT (wishlist logic + responsiveness) ========== -->
+<script>
+  (function() {
+    // ----- load & normalize data -----
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // fallback demo items if wishlist empty (so page looks nice)
+    if (wishlist.length === 0) {
+      // add some dummy products for visual (optional — can be removed, but shows responsive card)
+      wishlist = [
+        { id: 'd1', name: 'Galaxy S24 Ultra Clear Case', price: 1899, image: 'https://via.placeholder.com/300x300?text=S24+Case' },
+        { id: 'd2', name: '45W Super Fast Charger', price: 2499, image: 'https://via.placeholder.com/300x300?text=45W+Charger' },
+        { id: 'd3', name: 'Anti‑spy glass (S23+)', price: 1299, image: 'https://via.placeholder.com/300x300?text=Privacy+Glass' }
+      ];
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    }
+
+    // update counters in navbar
+    function updateCounters() {
+      const wishCount = wishlist.length;
+      const cartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+      const wishBadge = document.getElementById('wishlist-count');
+      const cartBadge = document.getElementById('cart-count');
+      if (wishBadge) wishBadge.innerText = wishCount;
+      if (cartBadge) cartBadge.innerText = cartCount;
+      
+      const counterSpan = document.getElementById('wishlist-counter');
+      if (counterSpan) counterSpan.innerText = wishCount + (wishCount === 1 ? ' item' : ' items');
+    }
+
+    // render wishlist cards
+    function displayWishlist() {
+      const container = document.getElementById("wishlist-items");
+      if (!container) return;
+
+      if (!wishlist.length) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="bi bi-heartbreak"></i>
+            <h4 class="mt-3">Your wishlist feels lonely</h4>
+            <p class="mb-3">Browse our galaxy of accessories and add some stars ✨</p>
+            <a href="index.html#shop" class="btn btn-outline-warning btn-lg rounded-pill px-5">Shop now</a>
+          </div>
+        `;
+        updateCounters();
+        return;
+      }
+
+      let html = '';
+      wishlist.forEach((item, idx) => {
+        // fallback image if needed
+        const imgSrc = item.image && item.image.trim() !== '' ? item.image : 'https://via.placeholder.com/300x300?text=Samsung';
+        html += `
+          <div class="wishlist-card">
+            <img src="${imgSrc}" alt="${item.name || 'product'}" loading="lazy">
+            <div class="wishlist-info">
+              <h6>${item.name || 'Unnamed product'}</h6>
+              <p>₹ ${Number(item.price).toLocaleString('en-IN')}</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2 ms-auto">
+              <button class="btn btn-soft-success" onclick="addToCartHandler(${idx})">
+                <i class="bi bi-cart-plus me-1"></i> Add to cart
+              </button>
+              <button class="btn btn-soft-danger" onclick="removeWishlistHandler(${idx})">
+                <i class="bi bi-trash3"></i> Remove
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+      updateCounters();
+    }
+
+    // --- handlers exposed globally (for onclick) ---
+    window.removeWishlistHandler = function(index) {
+      wishlist.splice(index, 1);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      displayWishlist();  // re-render
+    };
+
+    window.addToCartHandler = function(index) {
+      const product = { ...wishlist[index] };   // shallow copy
+      product.qty = 1;
+
+      // check if already in cart -> increase qty (optional, but good)
+      const existing = cart.find(item => item.id === product.id && item.name === product.name);
+      if (existing) {
+        existing.qty = (existing.qty || 1) + 1;
+      } else {
+        cart.push(product);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      // update cart badge
+      const cartCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+      const cartBadge = document.getElementById('cart-count');
+      if (cartBadge) cartBadge.innerText = cartCount;
+
+      // optional short feedback (no alert to be less intrusive)
+      const btn = event?.target?.closest('button');
+      if (btn) {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check-lg"></i> Added';
+        setTimeout(() => { btn.innerHTML = originalText; }, 1000);
+      }
+    };
+
+    // initial render
+    displayWishlist();
+
+    // if you want to keep wishlist & cart in sync with other tabs (storage event)
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'wishlist') {
+        wishlist = JSON.parse(e.newValue) || [];
+        displayWishlist();
+      }
+      if (e.key === 'cart') {
+        cart = JSON.parse(e.newValue) || [];
+        updateCounters();
+      }
+    });
+
+    // sync with current cart (for badge)
+    window.addEventListener('load', function() {
+      updateCounters();
+    });
+
+  })();
+</script>
+
+<!-- Bootstrap JS for toggler etc (optional but keeps collapse working) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- dummy login modal (not needed for functionality, but referenced in nav) -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title">Member login</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-secondary">Demo: just a placeholder — no action.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
